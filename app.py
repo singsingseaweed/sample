@@ -1,38 +1,19 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import signal
 
-def main():
-    st.title("202021024_임동휘")
-    st.header("202021024_임동휘")
-    st.subheader("step and bode plot")
-    
-    # 폐루프 전달함수
-    num = [100]
-    den = [1, 5, 106]
-    L = signal.TransferFunction(num, den)
 
-    # 시간 영역에서의 응답
-    t, y = signal.step(L)
-    fig1, ax1 = plt.subplots()
-    ax1.plot(t, y)
-    ax1.set(xlabel='Time', ylabel='Output', title='Step Response')
-    ax1.grid(True)
-    st.pyplot(fig1)
+st.set_page_config(
+    page_title="202021025 임수창",
+)
 
-    # 주파수 응답의 보드선도
-    w, mag, phase = signal.bode(L)
-    fig2, (ax2, ax3) = plt.subplots(2, 1, figsize=(8, 6))
-    ax2.semilogx(w, mag)
-    ax2.set(xlabel='Frequency [rad/s]', ylabel='Magnitude [dB]', title='Bode Plot - Magnitude')
-    ax2.grid(True)
-    ax3.semilogx(w, phase)
-    ax3.set(xlabel='Frequency [rad/s]', ylabel='Phase [degrees]', title='Bode Plot - Phase')
-    ax3.grid(True)
-    plt.tight_layout()
-    st.pyplot(fig2)
-
-if __name__ == '__main__':
-    main()
+st.header("제어공학 기말 202021025 임수창")
+st.subheader("2번문제:")
+st.subheader('''다음 전달함수 G(s) = 100 / (s+2)(s+3)일때  폐루프 전달함수를 구하고 unit step 입력의 응답곡선을 그리고, 주파수 응답을 보드선도로 그리시오. 이것을 자신의 학번 이름을 streamlit을 통해 Web에 배포 하시오. 
+''')
+st.subheader("")
+st.subheader("")
+st.subheader('''===================================================''')
+st.subheader("")
+st.subheader("")
+st.subheader('''폐루프 전달함수M(s)를 구하는 과정:''')
+st.subheader('''폐루프 전달함수 M(s)=G(s)/1+G(s)H(s)이고, H(s)는 1이라고 본다. 그러면 M(s)=100/s**2+5s+106이 된다''')
