@@ -1,37 +1,27 @@
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.signal import TransferFunction, lsim
+import scipy.signal as signal
 
-def plot_input_output():
-    num = [100]
-    den = [1, 5, 106]
+st.set_page_config(
+    page_title="제어공학기말",
+)
 
-    G = TransferFunction(num, den)
+st.header("응답곡선")
 
-    t = np.linspace(0, 10, 500)
+num = [100]
+den = [1, 5, 106]
 
-    u = np.sin(t)
+ltf = signal.TransferFunction(num, den)
 
-    t, y, _ = lsim(G, u, t)
+t = np.linspace(0, 5, 1000)
+u = np.ones_like(t)
 
-    plt.figure(figsize=(10, 6))
+t, y, _ = signal.step(ltf, T=t)
 
-    plt.plot(t, u, label='Input(sinusoidal)', color='blue')
+fig, ax = plt.subplots()
+ax.plot(t, y)
+ax.set(xlabel='Time', ylabel='Output', title='Step Response')
+ax.grid(True)
 
-    plt.plot(t, y, label='Output', color='red')
-
-    plt.title('Input & Output Over Time')
-    plt.xlabel('Time')
-    plt.ylabel('Amplitude')
-    plt.grid()
-    plt.legend()
-
-    st.pyplot(plt.gcf())
-
-# Streamlit 앱
-st.title('Input & Output Plot')
-st.write('This app demonstrates the input and output plot of a system over time.')
-
-# 입력 및 출력 그래프 표시
-plot_input_output()
+st.pyplot(fig)
