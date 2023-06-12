@@ -1,38 +1,37 @@
 import streamlit as st
-import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy import signal
+from scipy.signal import TransferFunction, lsim
 
-def main():
-    st.title("202021024_임동휘")
-    st.header("202021024_임동휘")
-    st.subheader("step and bode plot")
-    
-    # 폐루프 전달함수
+def plot_input_output():
     num = [100]
     den = [1, 5, 106]
-    L = signal.TransferFunction(num, den)
 
-    # 시간 영역에서의 응답
-    t, y = signal.step(L)
-    fig1, ax1 = plt.subplots()
-    ax1.plot(t, y)
-    ax1.set(xlabel='Time', ylabel='Output', title='Step Response')
-    ax1.grid(True)
-    st.pyplot(fig1)
+    G = TransferFunction(num, den)
 
-    # 주파수 응답의 보드선도
-    w, mag, phase = signal.bode(L)
-    fig2, (ax2, ax3) = plt.subplots(2, 1, figsize=(8, 6))
-    ax2.semilogx(w, mag)
-    ax2.set(xlabel='Frequency [rad/s]', ylabel='Magnitude [dB]', title='Bode Plot - Magnitude')
-    ax2.grid(True)
-    ax3.semilogx(w, phase)
-    ax3.set(xlabel='Frequency [rad/s]', ylabel='Phase [degrees]', title='Bode Plot - Phase')
-    ax3.grid(True)
-    plt.tight_layout()
-    st.pyplot(fig2)
+    t = np.linspace(0, 20, 500)
 
-if __name__ == '__main__':
-    main()
+    u = np.sin(t)
+
+    t, y, _ = lsim(G, u, t)
+
+    plt.figure(figsize=(10, 6))
+
+    plt.plot(t, u, label='Input(sinusoidal)', color='blue')
+
+    plt.plot(t, y, label='Output', color='red')
+
+    plt.title('Input & Output Over Time')
+    plt.xlabel('Time')
+    plt.ylabel('Amplitude')
+    plt.grid()
+    plt.legend()
+
+    st.pyplot(plt.gcf())
+
+# Streamlit 앱
+st.title('Input & Output Plot')
+st.write('This app demonstrates the input and output plot of a system over time.')
+
+# 입력 및 출력 그래프 표시
+plot_input_output()
