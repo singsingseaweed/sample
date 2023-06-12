@@ -9,7 +9,7 @@ def plot_input_output():
 
     G = TransferFunction(num, den)
 
-    t = np.linspace(0, 20, 500)
+    t = np.linspace(0, 10, 500)
 
     u = np.sin(t)
 
