@@ -1,26 +1,18 @@
 import streamlit as st
 import math
 
-def distribute_money(hours_worked, total_income, group_ranges, group_ratios):
+def distribute_money(hours_worked, total_income):
     total_hours_worked = sum(hours_worked)
     total_people = len(hours_worked)
     
-    # 그룹에 속한 사람들의 시간 합 구하기
-    group_hours_worked = [0] * len(group_ranges)
-    for i, hours in enumerate(hours_worked):
-        for j, (start, end) in enumerate(group_ranges):
-            if start <= hours <= end:
-                group_hours_worked[j] += hours
-                break
+    # 각 개인의 시간에 따른 분배 비율 계산
+    distribution_ratio = [hours / total_hours_worked for hours in hours_worked]
     
-    # 각 그룹의 분배 비율 계산
-    distribution_ratio = [hours / total_hours_worked for hours in group_hours_worked]
+    # 각 개인의 분배 금액 계산
+    individual_incomes = [ratio * total_income for ratio in distribution_ratio]
     
-    # 각 그룹의 분배 금액 계산
-    group_incomes = [ratio * total_income * group_ratio for ratio, group_ratio in zip(distribution_ratio, group_ratios)]
-    
-    # 각 그룹에게 분배된 돈을 100단위로 떨어지도록 조정
-    rounded_incomes = [math.floor(income / 100) * 100 for income in group_incomes]
+    # 각 개인에게 분배된 돈을 100단위로 떨어지도록 조정
+    rounded_incomes = [math.floor(income / 100) * 100 for income in individual_incomes]
     
     # 남은 잔돈 계산
     remaining_change = total_income - sum(rounded_incomes)
@@ -40,28 +32,15 @@ for i in range(num_people):
 # 전체 수익 입력 받기
 total_income = st.number_input("전체 수익을 입력하세요", min_value=0)
 
-# 그룹 설정
-num_groups = st.number_input("그룹의 수를 입력하세요", min_value=1, step=1, value=1)
-
-group_ranges = []
-group_ratios = []
-
-for i in range(num_groups):
-    start = st.number_input(f"{i+1}번째 그룹의 시작 시간을 입력하세요", min_value=0, step=1)
-    end = st.number_input(f"{i+1}번째 그룹의 끝 시간을 입력하세요", min_value=start, step=1)
-    ratio = st.number_input(f"{i+1}번째 그룹의 분배 비율을 입력하세요", min_value=0.0, step=0.01, format="%.2f")
-    group_ranges.append((start, end))
-    group_ratios.append(ratio)
-
 # "분배하기" 버튼 클릭 시 실행되는 코드
 if st.button("분배하기"):
     # 분배된 돈 계산
-    individual_incomes, remaining_change = distribute_money(hours_worked, total_income, group_ranges, group_ratios)
+    individual_incomes, remaining_change = distribute_money(hours_worked, total_income)
 
     # 결과 출력
-    st.write("그룹별 분배된 돈:")
+    st.write("개인별 분배된 돈:")
     for i, income in enumerate(individual_incomes):
-        st.write(f"그룹 {i+1}: {income:.2f}원")
+        st.write(f"개인 {i+1}: {income:.2f}원")
     
     # 잔돈 출력
     if remaining_change > 0:
