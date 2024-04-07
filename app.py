@@ -15,19 +15,18 @@ def distribute_money(hours_worked, total_income):
 # Streamlit 애플리케이션 제목 설정
 st.title("돈을 공정하게 분배해주는 앱")
 
-# 각 개인의 일한 시간 입력 받기
-hours_worked_person1 = st.number_input("첫 번째 사람의 일한 시간을 입력하세요", min_value=0, step=1)
-hours_worked_person2 = st.number_input("두 번째 사람의 일한 시간을 입력하세요", min_value=0, step=1)
-hours_worked_person3 = st.number_input("세 번째 사람의 일한 시간을 입력하세요", min_value=0, step=1)
+# 각 개인의 정보 입력 받기
+num_people = st.number_input("일한 사람의 수를 입력하세요", min_value=1, step=1, value=1)
+
+hours_worked = []
+for i in range(num_people):
+    hours_worked.append(st.number_input(f"{i+1}번째 사람의 일한 시간을 입력하세요", min_value=0, step=1))
 
 # 전체 수익 입력 받기
 total_income = st.number_input("전체 수익을 입력하세요", min_value=0)
 
 # "분배하기" 버튼 클릭 시 실행되는 코드
 if st.button("분배하기"):
-    # 각 개인의 일한 시간 리스트로 묶기
-    hours_worked = [hours_worked_person1, hours_worked_person2, hours_worked_person3]
-    
     # 분배된 돈 계산
     individual_incomes = distribute_money(hours_worked, total_income)
 
