@@ -17,8 +17,11 @@ def distribute_money(groups_info, total_income):
         individual_income = group_income / num_people
         individual_incomes.append(math.floor(individual_income / 100) * 100)  # 100단위로 나누어주기
     
+    # 전체 분배된 돈의 합 계산
+    total_distributed_income = sum(individual_incomes)
+    
     # 남은 잔돈 계산
-    remaining_change = total_income - sum(individual_incomes)
+    remaining_change = total_income - total_distributed_income
     
     return individual_incomes, remaining_change
 
@@ -50,3 +53,5 @@ if st.button("분배하기"):
     # 잔돈 출력
     if remaining_change > 0:
         st.write(f"잔돈: {remaining_change:.2f}원")
+    elif remaining_change < 0:
+        st.error("오류: 분배된 돈의 합이 전체 수익보다 큽니다.")
