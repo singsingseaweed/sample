@@ -33,8 +33,8 @@ st.title("돈을 공정하게 분배해주는 앱")
 num_people_full = st.number_input("끝까지 일한 사람의 수를 입력하세요", min_value=0, step=1, value=0)
 
 hours_worked_full = []
-if num_people_full > 0:
-    hours_worked_full.append(st.number_input(f"끝까지 일한 사람들의 총 일한 시간을 입력하세요", min_value=0, step=1))
+for i in range(num_people_full):
+    hours_worked_full.append(st.number_input(f"끝까지 일한 {i+1}번째 사람의 일한 시간을 입력하세요", min_value=0, step=1))
 
 # 중간에 도망간 인원의 정보 입력 받기
 num_people_runaway = st.number_input("중간에 도망간 사람의 수를 입력하세요", min_value=0, step=1, value=0)
