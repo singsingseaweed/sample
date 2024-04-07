@@ -1,18 +1,15 @@
 import streamlit as st
-import pandas as pd
-import os
 
-# 데이터 파일의 절대 경로
-data_file_path = os.path.abspath("data.csv")
+# Streamlit 애플리케이션 제목 설정
+st.title("간단한 이름 입력 앱")
 
-# 데이터 가져오기
-df = pd.read_csv(data_file_path)
+# 사용자로부터 이름 입력 받기
+name = st.text_input("이름을 입력하세요")
 
-# 웹 애플리케이션 정의
-st.title("간단한 데이터 시각화 앱")
+# 입력된 이름이 비어 있지 않은 경우에만 실행
+if name:
+    # 입력된 이름을 화면에 출력
+    st.write(f"안녕하세요, {name}님!")
 
-# 데이터를 보여주기
-st.write(df)
-
-# 막대 차트 표시
-st.bar_chart(df['column_name'])
+# 입력 필드 아래에 간단한 안내 메시지 표시
+st.write("이름을 입력하고 엔터를 누르면 화면에 표시됩니다.")
