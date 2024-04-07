@@ -2,28 +2,29 @@ import streamlit as st
 import math
 
 def distribute_money(hours_worked_full, hours_worked_runaway, total_income):
-    total_hours_worked = sum(hours_worked_full)
+    total_hours_worked_full = sum(hours_worked_full)
+    total_hours_worked_runaway = sum(hours_worked_runaway)
+    total_hours_worked = total_hours_worked_full + total_hours_worked_runaway
+
     total_people_full = len(hours_worked_full)
     total_people_runaway = len(hours_worked_runaway)
-    
-    # 각 개인의 시간에 따른 분배 비율 계산
-    distribution_ratio_full = [hours / total_hours_worked for hours in hours_worked_full]
-    distribution_ratio_runaway = [hours / total_hours_worked for hours in hours_worked_runaway]
-    
-    # 각 개인의 분배 금액 계산 (끝까지 일한 인원)
-    individual_incomes_full = [ratio * total_income for ratio in distribution_ratio_full]
-    
-    # 각 개인에게 분배된 돈을 100단위로 떨어지도록 조정 (끝까지 일한 인원)
+    total_people = total_people_full + total_people_runaway
+
+    # 전체 인원에 대한 시간당 금액 계산
+    hourly_rate = total_income / total_hours_worked
+
+    # 각 개인의 시간에 따른 분배 금액 계산
+    individual_incomes_full = [hours * hourly_rate for hours in hours_worked_full]
+    individual_incomes_runaway = [hours * hourly_rate for hours in hours_worked_runaway]
+
+    # 분배된 금액을 100단위로 조정
     rounded_incomes_full = [math.floor(income / 100) * 100 for income in individual_incomes_full]
-    
-    # 각 개인에게 분배된 돈을 100단위로 떨어지도록 조정 (중간에 도망친 인원)
-    individual_incomes_runaway = [ratio * total_income for ratio in distribution_ratio_runaway]
     rounded_incomes_runaway = [math.floor(income / 100) * 100 for income in individual_incomes_runaway]
-    
+
     # 남은 잔돈 계산
     remaining_change_full = total_income - sum(rounded_incomes_full)
     remaining_change_runaway = total_income - sum(rounded_incomes_runaway)
-    
+
     return rounded_incomes_full, remaining_change_full, rounded_incomes_runaway, remaining_change_runaway
 
 # Streamlit 애플리케이션 제목 설정
