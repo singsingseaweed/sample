@@ -47,9 +47,16 @@ if st.button("분배하기"):
         individual_incomes, remaining_change = distribute_money(individual_hours, total_income)
 
         # 결과 출력
-        st.write("개인별 분배된 돈:")
+        result = {}
         for i, income in enumerate(individual_incomes):
-            st.write(f"개인 {i+1}: {income:,.0f}원")
+            if individual_hours[i] not in result:
+                result[individual_hours[i]] = income
+            else:
+                result[individual_hours[i]] += income
+        
+        st.write("일한 시간별 분배된 돈:")
+        for hours, income in result.items():
+            st.write(f"{hours}시간을 일한 사람들: {income:,.0f}원")
         
         # 잔돈 출력
         if remaining_change > 0:
