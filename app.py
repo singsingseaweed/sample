@@ -14,10 +14,11 @@ def distribute_money(groups_info, total_income):
     # 각 그룹별로 개인당 받아야하는 돈 계산
     individual_incomes = []
     for group_income, num_people in zip(group_incomes, [group['num_people'] for group in groups_info]):
-        individual_incomes.append(group_income / num_people)
+        individual_income = group_income / num_people
+        individual_incomes.append(math.floor(individual_income / 100) * 100)  # 100단위로 나누어주기
     
     # 남은 잔돈 계산
-    remaining_change = total_income - sum(group_incomes)
+    remaining_change = total_income - sum(individual_incomes)
     
     return individual_incomes, remaining_change
 
