@@ -1,4 +1,5 @@
 import streamlit as st
+from datetime import datetime
 
 def calculate_payment(start_times, end_times):
     total_time = 0
@@ -11,7 +12,7 @@ def calculate_payment(start_times, end_times):
     for i in range(num_people):
         for start, end in zip(start_times, end_times):
             shared_time = min(end, end_times[i]) - max(start, start_times[i])
-            if shared_time > 0:
+            if shared_time.total_seconds() > 0:
                 payments[i] += shared_time.total_seconds() / 3600 / total_time  # 시간 비율에 따라 지불 금액 계산
 
     return [payment * total_bill for payment in payments]
@@ -27,10 +28,12 @@ def main():
 
     for i in range(int(num_people)):
         st.subheader(f"참석자 {i + 1}의 시작 및 종료 시간을 입력하세요:")
-        start_time = st.time_input(f"시작 시간 {i + 1}:", key=f"start_time_{i}")
-        end_time = st.time_input(f"종료 시간 {i + 1}:", key=f"end_time_{i}")
-        start_times.append(start_time)
-        end_times.append(end_time)
+        start_time = st.time_input(f"시작 시간 {i + 1}:")
+        end_time = st.time_input(f"종료 시간 {i + 1}:")
+        start = datetime.combine(datetime.today(), start_time)
+        end = datetime.combine(datetime.today(), end_time)
+        start_times.append(start)
+        end_times.append(end)
 
     payments = calculate_payment(start_times, end_times)
 
