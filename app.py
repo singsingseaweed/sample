@@ -20,22 +20,22 @@ def distribute_money(hours_worked, total_income):
     return rounded_incomes, remaining_change
 
 # Streamlit 애플리케이션 제목 설정
-st.title("돈을 공정하게 분배해주는 앱")
+st.title("시간으로 금액분배")
 
 # 각 개인의 정보 입력 받기
-num_people = st.number_input("전체 인원 수를 입력하세요", min_value=1, step=1, value=1)
-hours_worked = st.number_input("일한 시간을 입력하세요", min_value=0, step=1)
+num_people = st.number_input("전체 참여인원", min_value=1, step=1, value=1)
+hours_worked = st.number_input("회식한 시간", min_value=0, step=1)
 
 # 도망간 사람들의 수 입력 받기
-num_runaway = st.number_input("도망간 사람의 수를 입력하세요", min_value=0, step=1)
+num_runaway = st.number_input("중간 귀가자들", min_value=0, step=1)
 
 # 각 도망간 사람들의 정보 입력 받기
 runaway_hours = []
 for i in range(num_runaway):
-    runaway_hours.append(st.number_input(f"{i+1}번째 도망간 사람의 일한 시간을 입력하세요", min_value=0, step=1))
+    runaway_hours.append(st.number_input(f"{i+1}번째 귀가한 사람의 즐긴 시간", min_value=0, step=1))
 
 # 전체 수익 입력 받기
-total_income = st.number_input("전체 수익을 입력하세요", min_value=0)
+total_income = st.number_input("총 금액", min_value=0)
 
 # "분배하기" 버튼 클릭 시 실행되는 코드
 if st.button("분배하기"):
@@ -56,9 +56,9 @@ if st.button("분배하기"):
             if individual_hours[i] not in result:
                 result[individual_hours[i]] = income
         
-        st.write("일한 시간별 분배된 돈:")
+        st.write("즐긴 시간별 분배된 돈:")
         for hours, income in result.items():
-            st.write(f"{hours}시간을 일한 사람들: {income:,.0f}원")
+            st.write(f"{hours}시간을 즐긴 사람들: {income:,.0f}원")
         
         # 잔돈 출력
         if remaining_change > 0:
