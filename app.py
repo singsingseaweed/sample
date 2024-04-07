@@ -29,10 +29,11 @@ hours_worked = st.number_input("일한 시간을 입력하세요", min_value=0, 
 # 도망간 사람들의 수 입력 받기
 num_runaway = st.number_input("도망간 사람의 수를 입력하세요", min_value=0, step=1)
 
-# 각 도망간 사람들의 정보 입력 받기
-runaway_hours = []
+# 각 도망간 사람들의 그룹별 시간 입력 받기
+runaway_hours_groups = []
 for i in range(num_runaway):
-    runaway_hours.append(st.number_input(f"{i+1}번째 도망간 사람의 일한 시간을 입력하세요", min_value=0, step=1))
+    runaway_hours_group = st.number_input(f"{i+1}번째 도망간 사람의 그룹별 일한 시간을 입력하세요", min_value=0, step=1)
+    runaway_hours_groups.append(runaway_hours_group)
 
 # 전체 수익 입력 받기
 total_income = st.number_input("전체 수익을 입력하세요", min_value=0)
@@ -40,12 +41,12 @@ total_income = st.number_input("전체 수익을 입력하세요", min_value=0)
 # "분배하기" 버튼 클릭 시 실행되는 코드
 if st.button("분배하기"):
     # 유효성 검사
-    if total_income <= 0 or num_people <= num_runaway or hours_worked <= 0 or any(hour < 0 for hour in runaway_hours):
+    if total_income <= 0 or num_people <= num_runaway or hours_worked <= 0 or any(hour < 0 for hour in runaway_hours_groups):
         st.error("잘못된 입력입니다.")
     else:
         # 각 개인이 받아야 할 돈 계산
-        total_working_hours = (num_people - num_runaway) * hours_worked + sum(runaway_hours)
-        individual_hours = [hours_worked] * (num_people - num_runaway) + runaway_hours
+        total_working_hours = (num_people - num_runaway) * hours_worked + sum(runaway_hours_groups)
+        individual_hours = [hours_worked] * (num_people - num_runaway) + runaway_hours_groups
         
         # 분배된 돈 계산
         individual_incomes, remaining_change = distribute_money(individual_hours, total_income)
