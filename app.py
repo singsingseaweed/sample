@@ -34,14 +34,20 @@ total_income = st.number_input("전체 수익을 입력하세요", min_value=0)
 
 # "분배하기" 버튼 클릭 시 실행되는 코드
 if st.button("분배하기"):
-    # 분배된 돈 계산
-    individual_incomes, remaining_change = distribute_money(hours_worked, total_income)
+    # 유효성 검사
+    if total_income <= 0 or any(hour < 0 for hour in hours_worked):
+        st.error("잘못된 입력입니다.")
+    else:
+        # 분배된 돈 계산
+        individual_incomes, remaining_change = distribute_money(hours_worked, total_income)
 
-    # 결과 출력
-    st.write("개인별 분배된 돈:")
-    for i, income in enumerate(individual_incomes):
-        st.write(f"개인 {i+1}: {income:.2f}원")
-    
-    # 잔돈 출력
-    if remaining_change > 0:
-        st.write(f"잔돈: {remaining_change:.2f}원")
+        # 결과 출력
+        st.write("개인별 분배된 돈:")
+        for i, income in enumerate(individual_incomes):
+            st.write(f"개인 {i+1}: {income:,.0f}원")
+        
+        # 잔돈 출력
+        if remaining_change > 0:
+            st.write(f"잔돈: {remaining_change:,.0f}원")
+        elif remaining_change < 0:
+            st.write(f"잔돈: {-remaining_change:,.0f}원 부족")
