@@ -9,15 +9,12 @@ def distribute_money(hours_worked, total_income):
     distribution_ratio = [hours / total_hours_worked for hours in hours_worked]
     
     # 각 개인의 분배 금액 계산
-    individual_incomes = [ratio * total_income for ratio in distribution_ratio]
-    
-    # 각 개인에게 분배된 돈을 100단위로 떨어지도록 조정
-    rounded_incomes = [math.floor(income / 100) * 100 for income in individual_incomes]
+    individual_incomes = [round(ratio * total_income) for ratio in distribution_ratio]
     
     # 남은 잔돈 계산
-    remaining_change = total_income - sum(rounded_incomes)
+    remaining_change = total_income - sum(individual_incomes)
     
-    return rounded_incomes, remaining_change
+    return individual_incomes, remaining_change
 
 # Streamlit 애플리케이션 제목 설정
 st.title("돈을 공정하게 분배해주는 앱")
@@ -40,8 +37,12 @@ if st.button("분배하기"):
     # 결과 출력
     st.write("개인별 분배된 돈:")
     for i, income in enumerate(individual_incomes):
-        st.write(f"개인 {i+1}: {income:.2f}원")
+        st.write(f"개인 {i+1}: {income}원")
     
     # 잔돈 출력
     if remaining_change > 0:
-        st.write(f"잔돈: {remaining_change:.2f}원")
+        st.write(f"잔돈: {remaining_change}원")
+    elif remaining_change < 0:
+        st.write("잔돈이 마이너스입니다. 입력값을 확인하세요.")
+    else:
+        st.write("잔돈이 없습니다.")
