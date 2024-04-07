@@ -11,13 +11,15 @@ def distribute_money(groups_info, total_income):
     # 각 그룹의 분배 금액 계산
     group_incomes = [ratio * total_income for ratio in distribution_ratio]
     
-    # 각 그룹에게 분배된 돈을 100단위로 떨어지도록 조정
-    rounded_incomes = [math.floor(income / 100) * 100 for income in group_incomes]
+    # 각 그룹별로 개인당 받아야하는 돈 계산
+    individual_incomes = []
+    for group_income, num_people in zip(group_incomes, [group['num_people'] for group in groups_info]):
+        individual_incomes.append(group_income / num_people)
     
     # 남은 잔돈 계산
-    remaining_change = total_income - sum(rounded_incomes)
+    remaining_change = total_income - sum(group_incomes)
     
-    return rounded_incomes, remaining_change
+    return individual_incomes, remaining_change
 
 # Streamlit 애플리케이션 제목 설정
 st.title("돈을 공정하게 분배해주는 앱")
@@ -37,12 +39,12 @@ total_income = st.number_input("전체 수익을 입력하세요", min_value=0)
 # "분배하기" 버튼 클릭 시 실행되는 코드
 if st.button("분배하기"):
     # 분배된 돈 계산
-    group_incomes, remaining_change = distribute_money(groups_info, total_income)
+    individual_incomes, remaining_change = distribute_money(groups_info, total_income)
 
     # 결과 출력
-    st.write("그룹별 분배된 돈:")
-    for i, income in enumerate(group_incomes):
-        st.write(f"그룹 {i+1}: {income:.2f}원")
+    st.write("개인별 분배된 돈:")
+    for i, income in enumerate(individual_incomes):
+        st.write(f"그룹 {i//len(groups_info)+1}, 개인 {i%len(groups_info)+1}: {income:.2f}원")
     
     # 잔돈 출력
     if remaining_change > 0:
