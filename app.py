@@ -22,6 +22,9 @@ def distribute_money(hours_worked, total_income):
 # Streamlit 애플리케이션 제목 설정
 st.title("돈을 공정하게 분배해주는 앱")
 
+# 전체 인원 수 입력 받기
+total_people = st.number_input("전체 인원 수를 입력하세요", min_value=1, step=1, value=1)
+
 # 최대 일한 시간 설정
 max_hours_worked = st.number_input("모든 사람이 최대로 일한 시간을 입력하세요", min_value=1, step=1, value=8)
 
@@ -48,6 +51,12 @@ total_hours_worked = max(max_hours_worked, total_group_hours_worked)
 
 # 모든 그룹에 속한 사람들의 일한 시간 계산
 hours_worked = [total_hours_worked] * num_group1 + [total_hours_worked] * num_group2 + [total_hours_worked] * num_group3
+
+# 나머지 그룹에 속한 사람들의 수 계산
+num_remaining_people = total_people - num_group1 - num_group2 - num_group3
+
+# 모든 그룹에 속하지 않은 사람들의 일한 시간 계산
+hours_worked += [total_hours_worked] * num_remaining_people
 
 # "분배하기" 버튼 클릭 시 실행되는 코드
 if st.button("분배하기"):
