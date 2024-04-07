@@ -27,8 +27,8 @@ def main():
 
     for i in range(int(num_people)):
         st.subheader(f"참석자 {i + 1}의 시작 및 종료 시간을 입력하세요:")
-        start_time = st.time_input("시작 시간:")
-        end_time = st.time_input("종료 시간:")
+        start_time = st.time_input(f"시작 시간 {i + 1}:", key=f"start_time_{i}")
+        end_time = st.time_input(f"종료 시간 {i + 1}:", key=f"end_time_{i}")
         start_times.append(start_time)
         end_times.append(end_time)
 
