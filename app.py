@@ -50,14 +50,11 @@ if st.button("분배하기"):
         result = {}
         for i, income in enumerate(individual_incomes):
             if individual_hours[i] not in result:
-                result[individual_hours[i]] = []
-            result[individual_hours[i]].append(income)
+                result[individual_hours[i]] = income
         
         st.write("일한 시간별 분배된 돈:")
-        for hours, incomes in result.items():
-            st.write(f"{hours}시간을 일한 사람들:")
-            for idx, income in enumerate(incomes):
-                st.write(f"    개인 {idx+1}: {income:,.0f}원")
+        for hours, income in result.items():
+            st.write(f"{hours}시간을 일한 사람들: {income:,.0f}원")
         
         # 잔돈 출력
         if remaining_change > 0:
