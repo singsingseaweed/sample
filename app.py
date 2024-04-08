@@ -48,22 +48,34 @@ num_people = st.number_input("전체 참여인원", min_value=2, step=1, value=2
 # 모든 사람의 즐긴 시간 입력 받기
 hours_worked = st.number_input("모든 사람의 즐긴 시간", min_value=0, step=1)
 
+# 중간 귀가자의 정보 입력 받기
+num_runaway = st.number_input("중간 귀가자의 수", min_value=0, step=1, value=0)
+runaway_hours = []
+for i in range(num_runaway):
+    runaway_hours.append(st.number_input(f"{i+1}번째 귀가한 사람의 즐긴 시간", min_value=0, step=1))
+
 # 전체 수익 입력 받기
 total_income = st.number_input("총 금액", min_value=0)
 
 # "분배하기" 버튼 클릭 시 실행되는 코드
 if st.button("분배하기"):
     # 유효성 검사
-    if total_income <= 0 or hours_worked <= 0:
+    if total_income <= 0 or hours_worked <= 0 or any(hour < 0 for hour in runaway_hours):
         st.error("잘못된 입력입니다.")
     else:
+        # 총 시간 계산
+        total_hours = (num_people - num_runaway) * hours_worked + sum(runaway_hours)
+        
         # 각 개인이 받아야 할 돈 계산
-        individual_incomes, remaining_change = distribute_money([hours_worked] * num_people, total_income)
+        individual_incomes, remaining_change = distribute_money([hours_worked] * (num_people - num_runaway) + runaway_hours, total_income)
 
         # 결과 출력
-        st.write("분배된 돈:")
+        result = {}
         for i, income in enumerate(individual_incomes):
-            st.write(f"{i+1}번째 참여인: {income:,.0f}원")
+            if hours_worked not in result:
+                result[hours_worked] = income
+        for hours, income in result.items():
+            st.write(f"{hours}시간을 즐긴 사람들: {income:,.0f}원")
 
         # 잔돈 출력
         if remaining_change > 0:
