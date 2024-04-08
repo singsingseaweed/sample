@@ -22,23 +22,28 @@ def distribute_money(hours_worked, total_income):
     for i in range(total_people):
         individual_incomes[i] += remaining_amount * distribution_ratio[i]
     
-    # 각 개인에게 분배된 돈을 100원 단위로 떨어지도록 조정 후 10 단위로 조정
+    # 각 개인에게 분배된 돈을 100단위로 떨어지도록 조정 후 10 단위로 조정
     rounded_incomes = [round(income / 100) * 100 for income in individual_incomes]
     rounded_incomes = [round(income / 10) * 10 for income in rounded_incomes]
     
     # 남은 잔돈 계산
     remaining_change = total_income - sum(rounded_incomes)
     
-    # 남은 잔돈을 최대한 없애기 위해 처리
-    for i in range(total_people):
-        # 만약 잔돈이 존재한다면, 각 인원에게 분배된 돈에서 잔돈을 차감
-        if remaining_change > 0:
-            rounded_incomes[i] -= remaining_change / (total_people - i)
-            remaining_change -= remaining_change / (total_people - i)
-        else:
-            break
+    # 잔돈을 최대한 최소화하면서 10원 단위까지 나누기
+    while remaining_change >= 10:
+        # 모든 사람에게 공평하게 잔돈을 나누기 위해 한 사람에게 할당될 잔돈 계산
+        per_person_change = remaining_change / len(rounded_incomes)
+        # 각 사람의 잔돈에 per_person_change 더해주기
+        for i in range(len(rounded_incomes)):
+            rounded_incomes[i] += per_person_change
+        # 잔돈을 10으로 나눈 나머지 계산
+        remaining_change %= 10
     
-    return rounded_incomes, 0
+    # 각 사람에게 할당될 잔돈이 10원 미만인 경우는 가장 마지막 사람에게 할당
+    if remaining_change > 0:
+        rounded_incomes[-1] += remaining_change
+    
+    return rounded_incomes
 
 # Streamlit 애플리케이션 제목 설정
 st.title("회식비 분배")
@@ -84,7 +89,7 @@ if st.button("분배하기"):
         st.error("잘못된 입력입니다.")
     else:
         # 각 개인이 받아야 할 돈 계산
-        individual_incomes, remaining_change = distribute_money(hours_worked, total_income)
+        individual_incomes = distribute_money(hours_worked, total_income)
 
         # 결과 그룹화
         grouped_results = {}
