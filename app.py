@@ -5,22 +5,19 @@ def distribute_money(hours_worked, total_income):
     total_hours_worked = sum(hours_worked)
     total_people = len(hours_worked)
     
-    # 각 개인의 분배 비율 계산
-    distribution_ratio = [hours / total_hours_worked for hours in hours_worked]
-    
-    # 각 개인의 최소 요금 계산
-    minimum_payment = total_income / (2 * total_people)
-    
     # 각 개인의 분배 금액 계산
-    individual_incomes = [max(minimum_payment, ratio * total_income) for ratio in distribution_ratio]
-    
-    # 각 개인에게 분배된 돈을 100단위로 떨어지도록 조정
-    rounded_incomes = [math.floor(income / 100) * 100 for income in individual_incomes]
+    individual_incomes = []
+    for hours in hours_worked:
+        # 최소 요금 계산
+        minimum_payment = (total_income / total_people) / 2
+        # 즐긴 시간에 따른 분배 금액 계산
+        income = max(minimum_payment, minimum_payment * (hours / total_hours_worked))
+        individual_incomes.append(income)
     
     # 남은 잔돈 계산
-    remaining_change = total_income - sum(rounded_incomes)
+    remaining_change = total_income - sum(individual_incomes)
     
-    return rounded_incomes, remaining_change
+    return individual_incomes, remaining_change
 
 # Streamlit 애플리케이션 제목 설정
 st.title("시간으로 금액분배")
@@ -54,14 +51,9 @@ if st.button("분배하기"):
         individual_incomes, remaining_change = distribute_money(individual_hours, total_income)
 
         # 결과 출력
-        result = {}
-        for i, income in enumerate(individual_incomes):
-            if individual_hours[i] not in result:
-                result[individual_hours[i]] = income
-        
-        st.write("즐긴 시간별 분배된 돈:")
-        for hours, income in result.items():
-            st.write(f"{hours}시간을 즐긴 사람들: {income:,.0f}원")
+        st.write("분배된 돈:")
+        for i in range(len(individual_incomes)):
+            st.write(f"사람 {i+1}: {individual_incomes[i]:,.0f}원")
         
         # 잔돈 출력
         if remaining_change > 0:
