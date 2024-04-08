@@ -49,35 +49,8 @@ if st.button("분배하기"):
     if total_income <= 0 or any(hour < 0 for hour in hours_worked):
         st.error("잘못된 입력입니다.")
     else:
-        # 중간 귀가자가 있는 경우의 계산
-        if num_people > 1:
-            # 중간 귀가자를 제외한 참여자들의 시간과 총 인원수 계산
-            total_hours_excluding_runaway = sum(hours_worked)
-            total_people_excluding_runaway = len(hours_worked)
-            
-            # 중간 귀가자를 포함한 시간과 총 인원수 계산
-            total_hours_including_runaway = total_hours_excluding_runaway + hours_worked[-1]
-            total_people_including_runaway = total_people_excluding_runaway + 1
-            
-            # 중간 귀가자가 받아야 할 최소 금액 계산
-            min_amount_per_runaway = total_income / (2 * total_people_including_runaway)
-            
-            # 중간 귀가자를 제외한 참여자들이 받아야 할 최소 금액 계산
-            min_amount_per_person_excluding_runaway = total_income / (2 * total_people_excluding_runaway)
-            
-            # 중간 귀가자를 제외한 참여자들이 받아야 할 금액 계산
-            total_income_excluding_runaway = min_amount_per_person_excluding_runaway * total_people_excluding_runaway
-            
-            # 중간 귀가자가 받아야 할 금액 계산
-            income_for_runaway = total_income - total_income_excluding_runaway
-            
-            # 각 개인이 받아야 할 돈 계산
-            individual_incomes, remaining_change = distribute_money(hours_worked[:-1], total_income_excluding_runaway)
-            
-            # 중간 귀가자가 받아야 할 금액을 리스트에 추가
-            individual_incomes.append(income_for_runaway)
-        else:
-            individual_incomes, remaining_change = distribute_money(hours_worked, total_income)
+        # 각 개인이 받아야 할 돈 계산
+        individual_incomes, remaining_change = distribute_money(hours_worked, total_income)
 
         # 결과 출력
         for i, income in enumerate(individual_incomes):
