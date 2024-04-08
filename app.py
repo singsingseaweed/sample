@@ -37,6 +37,7 @@ st.title("시간으로 금액분배")
 num_people = st.number_input("전체 참여인원", min_value=1, step=1, value=1)
 hours_worked = []
 
+# 한 번에 각 개인의 시간 입력 받기
 for i in range(num_people):
     hours_worked.append(st.number_input(f"{i+1}번째 참여인의 회식한 시간", min_value=0, step=1))
 
@@ -60,4 +61,4 @@ if st.button("분배하기"):
         if remaining_change > 0:
             st.write(f"잔돈: {remaining_change:,.0f}원")
         elif remaining_change < 0:
-            st.write(f"잔돈: {-remaining_change:,.0f}원 부족") 
+            st.write(f"잔돈: {-remaining_change:,.0f}원 부족")
