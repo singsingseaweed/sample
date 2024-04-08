@@ -10,7 +10,7 @@ def distribute_money(hours_worked, total_income):
     distribution_ratio = [hours / total_hours_worked for hours in hours_worked]
     
     # 최소 금액 계산
-    min_amount_per_person = (total_income ) / (2 * total_people)
+    min_amount_per_person = (total_income * 7 ) / (11 * total_people)
     
     # 최소 금액을 각 개인에게 적용
     individual_incomes = [min_amount_per_person] * total_people
