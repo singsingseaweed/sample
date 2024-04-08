@@ -64,7 +64,7 @@ if st.button("분배하기"):
 
         # 각 회의 시간에 대한 결과 출력
         for time, participants in zip(set(hours_worked), range(1, len(hours_worked)+1)):
-            st.write(f"{time}시간 참여인들: {participants}번째 참여인, 금액: {time * total_income / sum(hours_worked):,.0f}원")
+            st.write(f"{time}시간 참여인들 금액: {time * total_income / sum(hours_worked):,.0f}원")
 
         # 잔돈 출력
         if remaining_change > 0:
