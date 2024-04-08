@@ -72,9 +72,10 @@ if st.button("분배하기"):
 
         # 그룹별 결과 출력
         for hours, participants in grouped_results.items():
-            participant_str = ', '.join([f"{participant[0]}번째" for participant in participants])
             total_amount = sum(participant[1] for participant in participants)
-            st.write(f"{hours}시간 참여인들 금액: {total_amount:,.0f}원 ({participant_str})")
+            per_person_amount = total_amount / len(participants)
+            participant_str = ', '.join([f"{participant[0]}번째" for participant in participants])
+            st.write(f"{hours}시간 참여인들 금액: {total_amount:,.0f}원 ({participant_str}), 한 명당: {per_person_amount:,.0f}원")
 
         # 잔돈 출력
         if remaining_change > 0:
