@@ -65,20 +65,18 @@ if st.button("분배하기"):
         # 결과 그룹화
         grouped_results = {}
         for i, income in enumerate(individual_incomes):
+            hours_participated = hours_worked[i]
             if income not in grouped_results:
                 grouped_results[income] = []
-            grouped_results[income].append(i + 1)
+            grouped_results[income].append((i + 1, hours_participated))
 
         # 그룹별 결과 출력
         for income, participants in grouped_results.items():
-            if len(participants) == 1:
-                st.write(f"{participants[0]}번째 참여인: {income:,.0f}원")
-            else:
-                participant_str = ', '.join([str(participant) for participant in participants])
-                st.write(f"{participant_str}번째 참여인들: {income:,.0f}원")
+            participant_str = ', '.join([f"{participant[0]}({participant[1]}시간)" for participant in participants])
+            st.write(f"{participant_str} 참여인들 금액: {income:,.0f}원")
 
         # 잔돈 출력
         if remaining_change > 0:
             st.write(f"잔돈: {remaining_change:,.0f}원")
         elif remaining_change < 0:
-            st.write(f"잔돈: {-remaining_change:,.0f}원 부족") 
+            st.write(f"잔돈: {-remaining_change:,.0f}원 부족")
