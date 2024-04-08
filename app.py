@@ -42,6 +42,15 @@ total_hours = st.number_input("회식한 총 시간", min_value=0, step=1)
 num_people = st.number_input("전체 참여인원", min_value=1, step=1, value=1)
 hours_worked = [total_hours] * num_people  # 모든 사람에게 동일한 시간 적용
 
+# 회식에서 이탈한 사람의 수 입력 받기
+num_dropout = st.number_input("회식에서 이탈한 사람 수", min_value=0, step=1, value=0)
+
+# 회식에서 이탈한 사람의 번호와 시간 입력 받기
+for i in range(num_dropout):
+    dropout_index = st.number_input(f"{i+1}번째 이탈한 사람 번호", min_value=1, max_value=num_people, step=1)
+    dropout_hours = st.number_input(f"{i+1}번째 이탈한 사람 회식한 시간", min_value=0, step=1)
+    hours_worked[dropout_index - 1] = dropout_hours
+
 # 전체 수익 입력 받기
 total_income = st.number_input("총 금액", min_value=0)
 
