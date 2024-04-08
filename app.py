@@ -69,15 +69,10 @@ if st.button("분배하기"):
                 grouped_results[income] = []
             grouped_results[income].append(i + 1)
 
-        # 그룹별 결과 출력
-        for income, participants in grouped_results.items():
-            if len(participants) == 1:
-                st.write(f"{participants[0]}번째 참여인: {income:,.0f}원")
-            elif participants == [1]:
-                st.write(f"끝까지 참여한 사람들: {income:,.0f}원")
-            else:
-                participant_str = ', '.join([str(participant) for participant in participants])
-                st.write(f"{participant_str}번째 참여인들: {income:,.0f}원")
+        # 각 회의 시간에 대한 결과 출력
+        for time, participants in zip(set(hours_worked), grouped_results.values()):
+            participant_str = ', '.join([str(participant) for participant in participants])
+            st.write(f"{time}시간 참여인들: {participant_str}, 금액: {time * total_income / sum(hours_worked):,.0f}원")
 
         # 잔돈 출력
         if remaining_change > 0:
