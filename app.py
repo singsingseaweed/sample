@@ -44,10 +44,10 @@ num_people = st.number_input("전체 참여인원", min_value=1, step=1, value=1
 # 이탈한 사람의 수 입력 받기
 num_dropout = st.number_input("회식에서 이탈한 사람 수", min_value=0, step=1, value=0)
 
-# 이탈한 사람의 시간을 제외한 총 시간 계산
-total_hours_excluding_dropout = total_hours - sum(st.number_input(f"{i+1}번째 이탈한 사람의 회식한 시간", min_value=0, step=1) for i in range(num_dropout))
+# 이탈한 사람의 시간을 고려한 전체 시간 계산
+total_hours_including_dropout = total_hours + sum(st.number_input(f"{i+1}번째 이탈한 사람의 회식한 시간", min_value=0, step=1) for i in range(num_dropout))
 
-hours_worked = [total_hours_excluding_dropout] * (num_people - num_dropout)  # 이탈한 사람의 수를 제외한 인원에게 동일한 시간 적용
+hours_worked = [total_hours_including_dropout] * num_people
 
 # 전체 수익 입력 받기
 total_income = st.number_input("총 금액", min_value=0)
