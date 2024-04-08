@@ -33,6 +33,15 @@ def distribute_money(hours_worked, total_income):
 # Streamlit 애플리케이션 제목 설정
 st.title("회식비 분배")
 
+# 규칙 텍스트
+st.markdown("""
+### 규칙:
+1. 참여자의 총 회식시간을 기준으로 회식비가 분배됩니다.
+2. 중간에 이탈한 참여자들의 회식시간은 고려되지 않습니다.
+3. 총 회식시간이 많은 참여자에게 더 많은 회식비가 분배됩니다.
+4. 분배된 회식비는 100원 단위로 반올림하여 지급됩니다.
+""")
+
 # 전체 참여인원 입력 받기
 num_people = st.number_input("전체 참여인원", min_value=1, step=1, value=1)
 
@@ -45,7 +54,7 @@ num_quitters = st.number_input("중간 귀가자 수", min_value=0, max_value=nu
 # 이탈한 사람들의 회식시간 입력 받기
 quitter_hours = []
 for i in range(num_quitters):
-    quitter_hours.append(st.number_input(f"{i+1}번째 귀가자 회식시간", min_value=0, step=1))
+    quitter_hours.append(st.number_input(f"{i+1}번째 귀가한 사람의 회식시간", min_value=0, step=1))
 
 # 전체 수익 입력 받기
 total_income = st.number_input("총 금액", min_value=0)
