@@ -33,26 +33,28 @@ def distribute_money(hours_worked, total_income):
 # Streamlit 애플리케이션 제목 설정
 st.title("시간으로 금액분배")
 
-# 전체 참여인원 중 중간에 이탈한 사람의 수 입력 받기
+# 전체 참여인원 입력 받기
 num_people = st.number_input("전체 참여인원", min_value=1, step=1, value=1)
+
+# 이탈하지 않은 사람들의 회식시간 입력 받기
+default_hours = st.number_input("이탈하지 않은 사람들의 회식한 시간", min_value=0, step=1)
+
+# 중간에 이탈한 사람의 수 입력 받기
 num_quitters = st.number_input("중간에 이탈한 사람의 수", min_value=0, max_value=num_people-1, step=1, value=0)
 
-# 이탈한 사람들의 회의시간 입력 받기
+# 이탈한 사람들의 회식시간 입력 받기
 quitter_hours = []
 for i in range(num_quitters):
     quitter_hours.append(st.number_input(f"{i+1}번째 이탈한 사람의 회식한 시간", min_value=0, step=1))
-
-# 이탈하지 않은 참여인원의 회의시간 입력 받기
-remaining_people = num_people - num_quitters
-default_hours = st.number_input("이탈하지 않은 사람들의 회식한 시간", min_value=0, step=1)
-
-hours_worked = [default_hours] * remaining_people + quitter_hours
 
 # 전체 수익 입력 받기
 total_income = st.number_input("총 금액", min_value=0)
 
 # "분배하기" 버튼 클릭 시 실행되는 코드
 if st.button("분배하기"):
+    # 이탈한 사람들의 수와 회의시간을 포함하여 모든 회의시간을 결합
+    hours_worked = [default_hours] * (num_people - num_quitters) + quitter_hours
+    
     # 유효성 검사
     if total_income <= 0 or any(hour < 0 for hour in hours_worked):
         st.error("잘못된 입력입니다.")
