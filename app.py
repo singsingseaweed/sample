@@ -35,25 +35,9 @@ st.title("시간으로 금액분배")
 
 # 각 개인의 정보 입력 받기
 num_people = st.number_input("전체 참여인원", min_value=1, step=1, value=1)
-hours_worked = []
+total_hours = st.number_input("전체 회식 시간", min_value=0)
 
-for i in range(num_people):
-    hours_worked.append(st.number_input(f"{i+1}번째 참여인의 회식한 시간", min_value=0, step=1))
-
-# 이탈한 사람의 수 입력 받기
-dropout_count = st.number_input("이탈한 사람의 수", min_value=0, step=1, value=0)
-
-# 이탈한 사람들의 인덱스와 수정할 회식 시간 입력 받기
-dropout_indices = []
-dropout_hours = []
-for i in range(dropout_count):
-    dropout_index = st.number_input(f"{i+1}번째 이탈한 사람의 인덱스", min_value=1, max_value=num_people, step=1)
-    dropout_indices.append(dropout_index - 1)  # 0부터 시작하도록 인덱스 조정
-    dropout_hours.append(st.number_input(f"{dropout_index}번째 이탈한 사람의 수정된 회식 시간", min_value=0, step=1))
-
-# 이탈한 사람의 시간을 수정
-for i, index in enumerate(dropout_indices):
-    hours_worked[index] = dropout_hours[i]
+hours_worked = [total_hours / num_people] * num_people
 
 # 전체 수익 입력 받기
 total_income = st.number_input("총 금액", min_value=0)
