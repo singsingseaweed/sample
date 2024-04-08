@@ -12,15 +12,8 @@ def distribute_money(hours_worked, total_income):
     # 최소 금액 계산
     min_amount_per_person = total_income / (2 * total_people)
     
-    # 최소 금액을 각 개인에게 적용
-    individual_incomes = [min_amount_per_person] * total_people
-    
-    # 남은 금액 계산
-    remaining_amount = total_income - min_amount_per_person * total_people
-    
-    # 남은 금액을 시간당 비율에 따라 배분
-    for i in range(total_people):
-        individual_incomes[i] += remaining_amount * distribution_ratio[i]
+    # 각 개인에게 지급할 금액 계산
+    individual_incomes = [min_amount_per_person * hours / total_hours_worked for hours in hours_worked]
     
     # 각 개인에게 분배된 돈을 100단위로 떨어지도록 조정
     rounded_incomes = [math.floor(income / 100) * 100 for income in individual_incomes]
@@ -63,8 +56,8 @@ if st.button("분배하기"):
         individual_incomes, remaining_change = distribute_money(hours_worked, total_income)
 
         # 각 회의 시간에 대한 결과 출력
-        for time, participants in zip(set(hours_worked), range(1, len(hours_worked)+1)):
-            st.write(f"{time}시간 참여인들 금액: {time * total_income / sum(hours_worked):,.0f}원")
+        for time, income in zip(set(hours_worked), individual_incomes):
+            st.write(f"{time}시간 참여인들 금액: {income:,.0f}원")
 
         # 잔돈 출력
         if remaining_change > 0:
