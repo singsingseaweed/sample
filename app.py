@@ -70,8 +70,11 @@ if st.button("분배하기"):
                 grouped_results[hours_participated] = []
             grouped_results[hours_participated].append((i + 1, income))
 
-        # 그룹별 결과 출력
-        for hours, participants in grouped_results.items():
+        # 결과를 시간에 따라 정렬
+        sorted_results = sorted(grouped_results.items(), key=lambda x: x[0], reverse=True)
+
+        # 정렬된 결과 출력
+        for hours, participants in sorted_results:
             total_amount = sum(participant[1] for participant in participants)
             per_person_amount = total_amount / len(participants)
             num_participants = len(participants)
