@@ -35,21 +35,18 @@ st.title("시간으로 금액분배")
 
 # 각 개인의 정보 입력 받기
 num_people = st.number_input("전체 참여인원", min_value=1, step=1, value=1)
-dropout_count = st.number_input("중간이탈자 수", min_value=0, step=1, value=0)
+total_hours = st.number_input("전체 회식 시간", min_value=0)
 
-# 중간이탈자의 회식 시간 입력 받기
+# 중간이탈자들의 회의 시간 입력 받기
 dropout_hours = []
-for i in range(dropout_count):
+for i in range(num_people):
     dropout_hours.append(st.number_input(f"{i+1}번째 중간이탈자의 회식 시간", min_value=0, step=1))
 
-# 중간이탈자를 제외한 나머지 회식 시간 입력 받기
-remaining_people = num_people - dropout_count
-remaining_hours = [st.number_input(f"{i+1}번째 참여인의 회식 시간", min_value=0, step=1) for i in range(remaining_people)]
+# 중간이탈자를 제외한 나머지 회식 시간 계산
+remaining_people_hours = total_hours - sum(dropout_hours)
 
-# 전체 회식 시간 계산
-total_hours = sum(dropout_hours) + sum(remaining_hours)
-
-hours_worked = [total_hours / num_people] * num_people
+# 나머지 참여자의 회식 시간 입력 받기
+remaining_hours = [st.number_input(f"{i+1}번째 참여인의 회식 시간", min_value=0, step=1, value=remaining_people_hours / (num_people - len(dropout_hours))) for i in range(num_people - len(dropout_hours))]
 
 # 전체 수익 입력 받기
 total_income = st.number_input("총 금액", min_value=0)
@@ -57,10 +54,11 @@ total_income = st.number_input("총 금액", min_value=0)
 # "분배하기" 버튼 클릭 시 실행되는 코드
 if st.button("분배하기"):
     # 유효성 검사
-    if total_income <= 0 or any(hour < 0 for hour in hours_worked):
+    if total_income <= 0 or any(hour < 0 for hour in dropout_hours + remaining_hours):
         st.error("잘못된 입력입니다.")
     else:
         # 각 개인이 받아야 할 돈 계산
+        hours_worked = dropout_hours + remaining_hours
         individual_incomes, remaining_change = distribute_money(hours_worked, total_income)
 
         # 결과 출력
