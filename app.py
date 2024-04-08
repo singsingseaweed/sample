@@ -37,7 +37,7 @@ st.title("시간으로 금액분배")
 num_people = st.number_input("전체 참여인원", min_value=1, step=1, value=1)
 hours_worked = []
 
-# 한 번에 각 개인의 시간 입력 받기
+# 각 개인의 시간을 통합해서 입력 받기
 for i in range(num_people):
     hours_worked.append(st.number_input(f"{i+1}번째 참여인의 회식한 시간", min_value=0, step=1))
 
