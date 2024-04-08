@@ -2,7 +2,8 @@ import streamlit as st
 import math
 
 # 시간에 따라 분배하는 함수
-def distribute_money(total_hours_worked, total_income, hours_worked):
+def distribute_money(hours_worked, total_income):
+    total_hours_worked = sum(hours_worked)
     total_people = len(hours_worked)
     
     # 각 개인의 분배 비율 계산
@@ -32,18 +33,15 @@ def distribute_money(total_hours_worked, total_income, hours_worked):
 # Streamlit 애플리케이션 제목 설정
 st.title("시간으로 금액분배")
 
-# 전체 수익 입력 받기
-total_income = st.number_input("총 금액", min_value=0)
-
-# 전체 인원의 총 시간 입력 받기
-total_hours_worked = st.number_input("전체 인원의 총 회식 시간", min_value=0)
-
-# 현재 일한 인원의 정보 입력 받기
-num_people = st.number_input("현재 참여인원", min_value=1, step=1, value=1)
+# 각 개인의 정보 입력 받기
+num_people = st.number_input("전체 참여인원", min_value=1, step=1, value=1)
 hours_worked = []
 
 for i in range(num_people):
     hours_worked.append(st.number_input(f"{i+1}번째 참여인의 회식한 시간", min_value=0, step=1))
+
+# 전체 수익 입력 받기
+total_income = st.number_input("총 금액", min_value=0)
 
 # "분배하기" 버튼 클릭 시 실행되는 코드
 if st.button("분배하기"):
@@ -52,7 +50,7 @@ if st.button("분배하기"):
         st.error("잘못된 입력입니다.")
     else:
         # 각 개인이 받아야 할 돈 계산
-        individual_incomes, remaining_change = distribute_money(total_hours_worked, total_income, hours_worked)
+        individual_incomes, remaining_change = distribute_money(hours_worked, total_income)
 
         # 결과 출력
         for i, income in enumerate(individual_incomes):
@@ -62,4 +60,4 @@ if st.button("분배하기"):
         if remaining_change > 0:
             st.write(f"잔돈: {remaining_change:,.0f}원")
         elif remaining_change < 0:
-            st.write(f"잔돈: {-remaining_change:,.0f}원 부족")
+            st.write(f"잔돈: {-remaining_change:,.0f}원 부족") 
