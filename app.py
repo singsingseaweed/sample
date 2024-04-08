@@ -35,7 +35,19 @@ st.title("시간으로 금액분배")
 
 # 각 개인의 정보 입력 받기
 num_people = st.number_input("전체 참여인원", min_value=1, step=1, value=1)
-total_hours = st.number_input("전체 회식 시간", min_value=0)
+dropout_count = st.number_input("중간이탈자 수", min_value=0, step=1, value=0)
+
+# 중간이탈자의 회식 시간 입력 받기
+dropout_hours = []
+for i in range(dropout_count):
+    dropout_hours.append(st.number_input(f"{i+1}번째 중간이탈자의 회식 시간", min_value=0, step=1))
+
+# 중간이탈자를 제외한 나머지 회식 시간 입력 받기
+remaining_people = num_people - dropout_count
+remaining_hours = [st.number_input(f"{i+1}번째 참여인의 회식 시간", min_value=0, step=1) for i in range(remaining_people)]
+
+# 전체 회식 시간 계산
+total_hours = sum(dropout_hours) + sum(remaining_hours)
 
 hours_worked = [total_hours / num_people] * num_people
 
