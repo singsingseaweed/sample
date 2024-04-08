@@ -62,17 +62,9 @@ if st.button("분배하기"):
         # 각 개인이 받아야 할 돈 계산
         individual_incomes, remaining_change = distribute_money(hours_worked, total_income)
 
-        # 결과 그룹화
-        grouped_results = {}
-        for i, income in enumerate(individual_incomes):
-            if income not in grouped_results:
-                grouped_results[income] = []
-            grouped_results[income].append(i + 1)
-
         # 각 회의 시간에 대한 결과 출력
-        for time, participants in zip(set(hours_worked), grouped_results.values()):
-            participant_str = ', '.join([str(participant) for participant in participants])
-            st.write(f"{time}시간 참여인들: {participant_str}, 금액: {time * total_income / sum(hours_worked):,.0f}원")
+        for time, participants in zip(set(hours_worked), range(1, len(hours_worked)+1)):
+            st.write(f"{time}시간 참여인들: {participants}번째 참여인, 금액: {time * total_income / sum(hours_worked):,.0f}원")
 
         # 잔돈 출력
         if remaining_change > 0:
