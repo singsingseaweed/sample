@@ -40,6 +40,15 @@ hours_worked = []
 for i in range(num_people):
     hours_worked.append(st.number_input(f"{i+1}번째 참여인의 회식한 시간", min_value=0, step=1))
 
+# 중간에 이탈한 사람들의 회식 시간 입력 받기
+departed_people = st.text_input("중간에 이탈한 사람들의 회식 시간 (인덱스 기준, 예: 1 3 5)")
+
+departed_people = [int(index) - 1 for index in departed_people.split()]
+
+for index in departed_people:
+    if index >= 0 and index < num_people:
+        hours_worked[index] = -1
+
 # 전체 수익 입력 받기
 total_income = st.number_input("총 금액", min_value=0)
 
@@ -54,10 +63,11 @@ if st.button("분배하기"):
 
         # 결과 출력
         for i, income in enumerate(individual_incomes):
-            st.write(f"{i+1}번째 참여인: {income:,.0f}원")
+            if hours_worked[i] >= 0:
+                st.write(f"{i+1}번째 참여인: {income:,.0f}원")
 
         # 잔돈 출력
         if remaining_change > 0:
             st.write(f"잔돈: {remaining_change:,.0f}원")
         elif remaining_change < 0:
-            st.write(f"잔돈: {-remaining_change:,.0f}원 부족") 
+            st.write(f"잔돈: {-remaining_change:,.0f}원 부족")
