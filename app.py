@@ -74,8 +74,8 @@ if st.button("분배하기"):
         for hours, participants in grouped_results.items():
             total_amount = sum(participant[1] for participant in participants)
             per_person_amount = total_amount / len(participants)
-            participant_str = ', '.join([f"{participant[0]}번째" for participant in participants])
-            st.write(f"{hours}시간 참가자들의 금액: {per_person_amount:,.0f}원 ({participant_str})")
+            num_participants = len(participants)
+            st.write(f"{hours}시간 참가자들의 금액: {per_person_amount:,.0f}원 ({num_participants}명)")
 
         # 잔돈 출력
         if remaining_change > 0:
