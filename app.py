@@ -1,41 +1,3 @@
-import streamlit as st
-import math
-
-# 시간에 따라 분배하는 함수
-def distribute_money(hours_worked, total_income):
-    total_hours_worked = sum(hours_worked)
-    total_people = len(hours_worked)
-    
-    # 각 개인의 분배 비율 계산
-    distribution_ratio = [hours / total_hours_worked for hours in hours_worked]
-    
-    # 최소 금액 계산
-    min_amount_per_person = total_income / (2 * total_people)
-    
-    # 최소 금액을 각 개인에게 적용
-    individual_incomes = [min_amount_per_person] * total_people
-    
-    # 남은 금액 계산
-    remaining_amount = total_income - min_amount_per_person * total_people
-    
-    # 남은 금액을 시간당 비율에 따라 배분
-    for i in range(total_people):
-        individual_incomes[i] += remaining_amount * distribution_ratio[i]
-    
-    # 각 개인에게 분배된 돈을 100단위로 떨어지도록 조정
-    rounded_incomes = [math.floor(income / 100) * 100 for income in individual_incomes]
-    
-    # 남은 잔돈 계산
-    remaining_change = total_income - sum(rounded_incomes)
-    
-    return rounded_incomes, remaining_change
-
-# Streamlit 애플리케이션 제목 설정
-st.title("시간으로 금액분배")
-
-# 전체 참여인원 입력 받기
-num_people = st.number_input("전체 참여인원", min_value=1, step=1, value=1)
-
 # 이탈하지 않은 사람들의 회식시간 입력 받기
 default_hours = st.number_input("이탈하지 않은 사람들의 회식한 시간", min_value=0, step=1)
 
@@ -71,14 +33,11 @@ if st.button("분배하기"):
 
         # 그룹별 결과 출력
         for income, participants in grouped_results.items():
-            if len(participants) == 1:
-                st.write(f"{participants[0]}번째 참여인: {income:,.0f}원")
-            else:
-                participant_str = ', '.join([str(participant) for participant in participants])
-                st.write(f"{participant_str}번째 참여인들: {income:,.0f}원")
+            participant_str = ', '.join([str(participant) for participant in participants])
+            st.write(f"{len(participants)}시간 참여인들: {income:,.0f}원")
 
         # 잔돈 출력
         if remaining_change > 0:
             st.write(f"잔돈: {remaining_change:,.0f}원")
         elif remaining_change < 0:
-            st.write(f"잔돈: {-remaining_change:,.0f}원 부족") 
+            st.write(f"잔돈: {-remaining_change:,.0f}원 부족")
