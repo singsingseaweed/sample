@@ -24,13 +24,15 @@ st.title("시간으로 금액분배")
 
 # 각 개인의 정보 입력 받기
 num_people = st.number_input("전체 참여인원", min_value=1, step=1, value=1)
-hours_worked = [st.number_input(f"{i+1}번째 사람의 회식한 시간", min_value=0, step=1) for i in range(num_people)]
+hours_worked = st.number_input("회식한 시간", min_value=0, step=1)
 
 # 도망간 사람들의 수 입력 받기
 num_runaway = st.number_input("중간 귀가자들", min_value=0, step=1)
 
 # 각 도망간 사람들의 정보 입력 받기
-runaway_hours = [st.number_input(f"{i+1}번째 귀가한 사람의 즐긴 시간", min_value=0, step=1) for i in range(num_runaway)]
+runaway_hours = []
+for i in range(num_runaway):
+    runaway_hours.append(st.number_input(f"{i+1}번째 귀가한 사람의 즐긴 시간", min_value=0, step=1))
 
 # 전체 수익 입력 받기
 total_income = st.number_input("총 금액", min_value=0)
@@ -38,12 +40,12 @@ total_income = st.number_input("총 금액", min_value=0)
 # "분배하기" 버튼 클릭 시 실행되는 코드
 if st.button("분배하기"):
     # 유효성 검사
-    if total_income <= 0 or num_people <= num_runaway or any(hour < 0 for hour in hours_worked) or any(hour < 0 for hour in runaway_hours):
+    if total_income <= 0 or num_people <= num_runaway or hours_worked <= 0 or any(hour < 0 for hour in runaway_hours):
         st.error("잘못된 입력입니다.")
     else:
         # 각 개인이 받아야 할 돈 계산
-        total_working_hours = sum(hours_worked) + sum(runaway_hours)
-        individual_hours = hours_worked + runaway_hours
+        total_working_hours = (num_people - num_runaway) * hours_worked + sum(runaway_hours)
+        individual_hours = [hours_worked] * (num_people - num_runaway) + runaway_hours
         
         # 분배된 돈 계산
         individual_incomes, remaining_change = distribute_money(individual_hours, total_income)
@@ -51,11 +53,8 @@ if st.button("분배하기"):
         # 결과 출력
         result = {}
         for i, income in enumerate(individual_incomes):
-            hours = individual_hours[i]
-            if hours not in result:
-                result[hours] = income
-            else:
-                result[hours] += income
+            if individual_hours[i] not in result:
+                result[individual_hours[i]] = income
         
         st.write("즐긴 시간별 분배된 돈:")
         for hours, income in result.items():
