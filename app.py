@@ -38,22 +38,16 @@ st.title("시간으로 금액분배")
 # 회식한 총 시간 입력 받기
 total_hours = st.number_input("회식한 총 시간", min_value=0, step=1)
 
-# 전체 참여 인원 수 입력 받기
-num_people = st.number_input("전체 참여 인원 수", min_value=1, step=1, value=1)
-
-# 실제 참여한 인원 수 입력 받기
-num_attendees = st.number_input("참여한 인원 수", min_value=1, step=1, value=1)
-
 # 각 개인의 정보 입력 받기
-hours_worked = [total_hours] * num_attendees  # 모든 사람에게 동일한 시간 적용
+num_people = st.number_input("전체 참여인원", min_value=1, step=1, value=1)
 
-# 회식에서 이탈한 사람의 수 입력 받기
-num_dropout = num_people - num_attendees
+# 이탈한 사람의 수 입력 받기
+num_dropout = st.number_input("회식에서 이탈한 사람 수", min_value=0, step=1, value=0)
 
-# 회식에서 이탈한 사람의 시간 입력 받기
-for i in range(num_dropout):
-    dropout_hours = st.number_input(f"{i+1}번째 이탈한 사람의 회식한 시간", min_value=0, step=1)
-    hours_worked.append(dropout_hours)
+# 이탈한 사람의 시간을 제외한 총 시간 계산
+total_hours_excluding_dropout = total_hours - sum(st.number_input(f"{i+1}번째 이탈한 사람의 회식한 시간", min_value=0, step=1) for i in range(num_dropout))
+
+hours_worked = [total_hours_excluding_dropout] * (num_people - num_dropout)  # 이탈한 사람의 수를 제외한 인원에게 동일한 시간 적용
 
 # 전체 수익 입력 받기
 total_income = st.number_input("총 금액", min_value=0)
