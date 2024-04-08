@@ -22,14 +22,23 @@ def distribute_money(hours_worked, total_income):
     for i in range(total_people):
         individual_incomes[i] += remaining_amount * distribution_ratio[i]
     
-    # 각 개인에게 분배된 돈을 100단위로 떨어지도록 조정 후 10 단위로 조정
+    # 각 개인에게 분배된 돈을 100원 단위로 떨어지도록 조정 후 10 단위로 조정
     rounded_incomes = [round(income / 100) * 100 for income in individual_incomes]
     rounded_incomes = [round(income / 10) * 10 for income in rounded_incomes]
     
     # 남은 잔돈 계산
     remaining_change = total_income - sum(rounded_incomes)
     
-    return rounded_incomes, remaining_change
+    # 남은 잔돈을 최대한 없애기 위해 처리
+    for i in range(total_people):
+        # 만약 잔돈이 존재한다면, 각 인원에게 분배된 돈에서 잔돈을 차감
+        if remaining_change > 0:
+            rounded_incomes[i] -= remaining_change / (total_people - i)
+            remaining_change -= remaining_change / (total_people - i)
+        else:
+            break
+    
+    return rounded_incomes, 0
 
 # Streamlit 애플리케이션 제목 설정
 st.title("회식비 분배")
@@ -94,9 +103,3 @@ if st.button("분배하기"):
             per_person_amount = total_amount / len(participants)
             num_participants = len(participants)
             st.write(f"{hours}시간 참가자들: {per_person_amount:,.0f}원 ({num_participants}명)")
-
-        # 잔돈 출력
-        if remaining_change > 0:
-            st.write(f"잔돈: {remaining_change:,.0f}원")
-        elif remaining_change < 0:
-            st.write(f"잔돈: {-remaining_change:,.0f}원 부족")
