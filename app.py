@@ -14,15 +14,12 @@ def distribute_money(hours_worked, total_income):
     # 최소 금액 계산
     min_amount_per_person = total_income / (2 * total_people)
     
-    # 최소 금액을 각 개인에게 적용
-    individual_incomes = [min_amount_per_person] * total_people
+    # 각 개인이 받아야 할 최소 금액 계산
+    individual_min_amounts = [min_amount_per_person * hours / total_hours_worked for hours in hours_worked]
     
-    # 남은 금액 계산
-    remaining_amount = total_income - min_amount_per_person * total_people
-    
-    # 남은 금액을 시간당 비율에 따라 배분
-    for i in range(total_people):
-        individual_incomes[i] += remaining_amount * distribution_ratio[i]
+    # 각 개인이 받아야 할 총 금액 계산
+    individual_incomes = [min_amount + (total_income - min_amount_per_person * total_people) * ratio
+                          for min_amount, ratio in zip(individual_min_amounts, distribution_ratio)]
     
     # 각 개인에게 분배된 돈을 100단위로 떨어지도록 조정
     rounded_incomes = [math.floor(income / 100) * 100 for income in individual_incomes]
