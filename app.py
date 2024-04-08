@@ -63,10 +63,8 @@ if st.button("분배하기"):
         individual_incomes, remaining_change = distribute_money(hours_worked, total_income)
 
         # 결과 출력
-        # 이탈하지 않은 사람들의 금액분배 출력
-        st.write("이탈하지 않은 사람들의 금액분배:")
-        for i in range(num_people - num_quitters):
-            st.write(f"{i+1}번째 참여인: {individual_incomes[i]:,.0f}원")
+        for i, income in enumerate(individual_incomes):
+            st.write(f"{i+1}번째 참여인: {income:,.0f}원")
 
         # 잔돈 출력
         if remaining_change > 0:
