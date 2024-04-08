@@ -33,12 +33,20 @@ def distribute_money(hours_worked, total_income):
 # Streamlit 애플리케이션 제목 설정
 st.title("시간으로 금액분배")
 
-# 각 개인의 정보 입력 받기
+# 전체 참여인원 중 중간에 이탈한 사람의 수 입력 받기
 num_people = st.number_input("전체 참여인원", min_value=1, step=1, value=1)
-hours_worked = []
+num_quitters = st.number_input("중간에 이탈한 사람의 수", min_value=0, max_value=num_people-1, step=1, value=0)
 
-for i in range(num_people):
-    hours_worked.append(st.number_input(f"{i+1}번째 참여인의 회식한 시간", min_value=0, step=1))
+# 이탈한 사람들의 회의시간 입력 받기
+quitter_hours = []
+for i in range(num_quitters):
+    quitter_hours.append(st.number_input(f"{i+1}번째 이탈한 사람의 회식한 시간", min_value=0, step=1))
+
+# 이탈하지 않은 참여인원의 회의시간 입력 받기
+remaining_people = num_people - num_quitters
+default_hours = st.number_input("이탈하지 않은 사람들의 회식한 시간", min_value=0, step=1)
+
+hours_worked = [default_hours] * remaining_people + quitter_hours
 
 # 전체 수익 입력 받기
 total_income = st.number_input("총 금액", min_value=0)
