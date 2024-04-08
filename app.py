@@ -45,7 +45,7 @@ num_quitters = st.number_input("중간 귀가자 수", min_value=0, max_value=nu
 # 이탈한 사람들의 회식시간 입력 받기
 quitter_hours = []
 for i in range(num_quitters):
-    quitter_hours.append(st.number_input(f"{i+1}번째 귀가한 사람의 회식시간", min_value=0, step=1))
+    quitter_hours.append(st.number_input(f"{i+1}번째 귀가자 회식시간", min_value=0, step=1))
 
 # 전체 수익 입력 받기
 total_income = st.number_input("총 금액", min_value=0)
