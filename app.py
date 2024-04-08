@@ -10,7 +10,7 @@ def distribute_money(hours_worked, total_income):
     distribution_ratio = [hours / total_hours_worked for hours in hours_worked]
     
     # 최소 금액 계산
-    min_amount_per_person = (total_income * 7) / (11 * total_people)
+    min_amount_per_person = (total_income * 7 ) / (11 * total_people)
     
     # 최소 금액을 각 개인에게 적용
     individual_incomes = [min_amount_per_person] * total_people
@@ -22,9 +22,8 @@ def distribute_money(hours_worked, total_income):
     for i in range(total_people):
         individual_incomes[i] += remaining_amount * distribution_ratio[i]
     
-    # 각 개인에게 분배된 돈을 100단위로 떨어지도록 조정 후 10 단위로 조정
-    rounded_incomes = [round(income / 100) * 100 for income in individual_incomes]
-    rounded_incomes = [round(income / 10) * 10 for income in rounded_incomes]
+    # 각 개인에게 분배된 돈을 100단위로 떨어지도록 조정
+    rounded_incomes = [math.floor(income / 100) * 100 for income in individual_incomes]
     
     # 남은 잔돈 계산
     remaining_change = total_income - sum(rounded_incomes)
