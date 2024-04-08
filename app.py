@@ -73,6 +73,8 @@ if st.button("분배하기"):
         for income, participants in grouped_results.items():
             if len(participants) == 1:
                 st.write(f"{participants[0]}번째 참여인: {income:,.0f}원")
+            elif participants == [1]:
+                st.write(f"끝까지 참여한 사람들: {income:,.0f}원")
             else:
                 participant_str = ', '.join([str(participant) for participant in participants])
                 st.write(f"{participant_str}번째 참여인들: {income:,.0f}원")
