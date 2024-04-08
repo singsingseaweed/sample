@@ -8,8 +8,11 @@ def distribute_money(hours_worked, total_income):
     # 각 개인의 분배 비율 계산
     distribution_ratio = [hours / total_hours_worked for hours in hours_worked]
     
+    # 각 개인의 최소 요금 계산
+    minimum_payment = total_income / (2 * total_people)
+    
     # 각 개인의 분배 금액 계산
-    individual_incomes = [ratio * total_income for ratio in distribution_ratio]
+    individual_incomes = [max(minimum_payment, ratio * total_income) for ratio in distribution_ratio]
     
     # 각 개인에게 분배된 돈을 100단위로 떨어지도록 조정
     rounded_incomes = [math.floor(income / 100) * 100 for income in individual_incomes]
